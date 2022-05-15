@@ -6,6 +6,7 @@ require (
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-playground/validator/v10 v10.11.0
+	github.com/lib/pq v1.10.5
 	github.com/sirupsen/logrus v1.8.1
 )
 

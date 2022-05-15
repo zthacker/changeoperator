@@ -1,1 +1,43 @@
-YXBpVmVyc2lvbjogMQoKCnNlcnZpY2VzOgoKICBjaGFuZ2Vib3Q6CiAgICBjb250YWluZXJfbmFtZTogY2hhbmdlYm90CiAgICBidWlsZDogLi9jb1NsYWNrYm90Ly4KICAgIHBvcnRzOgogICAgICAtICc5NTAwOjk1MDAnCiAgICByZXN0YXJ0OiBvbi1mYWlsdXJlCiAgICBlbnZpcm9ubWVudDoKICAgICAgQ0hBTkdFQk9UX1BPUlQ6IDk1MDAKICAgICAgU0xBQ0tfVE9LRU46ICd4b3hiLTE2OTYwMTIxNDg3MDYtMTcwMjU1Njc4NzYyMC1QNzdkeU00eHZLTGRodW9RaERVMm9SaWgnCiAgICAgIENIQU5HRV9DSEFOTkVMX0lEOiAiQzAzRUhIMjlYSjYiCiAgICAgIFNMQUNLX1dPUktTUEFDRV9VUkw6ICJodHRwczovL2NvZmZlZS1iZ3YyOTc1LnNsYWNrLmNvbSIKICAgICAgQ0hBTkFHRV9PUEVSQVRPUl9VUkw6ICJodHRwOi8vY2hhbmdlb3BlcmF0b3I6NTAwMC9jaGFuZ2UvY3JlYXRlIgogICAgdm9sdW1lczoKICAgICAgLSAuOi9jaGFuZ2Vib3QKICAgIGRlcGVuZHNfb246CiAgICAgIC0gY2hhbmdlb3BlcmF0b3IKCiAgY2hhbmdlb3BlcmF0b3I6CiAgICBjb250YWluZXJfbmFtZTogY2hhbmdlb3BlcmF0b3IKICAgIGJ1aWxkOiAuL2NvQVBJLy4KICAgIHBvcnRzOgogICAgICAtICc1MDAwOjUwMDAnICNjaGFuZ2UgdG8gbWF0Y2ggeW91ciBlbnYgcG9ydAogICAgZW52aXJvbm1lbnQ6CiAgICAgIENIQU5HRU9QRVJBVE9SX1BPUlQ6IDUwMDAKICAgICAgUEdfQ09OTjogInBvc3RncmVzOi8vdXNlcjpwYXNzd29yZEBjaGFuZ2VzOjU0MzIvY2hhbmdlc2RiP3NzbG1vZGU9ZGlzYWJsZSIKICAgIHZvbHVtZXM6CiAgICAgIC0gLjovY2hhbmdlb3BlcmF0b3IKICAgIGRlcGVuZHNfb246CiAgICAgIC0gZGIKCiAgZGI6CiAgICBpbWFnZTogcG9zdGdyZXMKICAgIGNvbnRhaW5lcl9uYW1lOiBjaGFuZ2VzCiAgICBlbnZpcm9ubWVudDoKICAgICAgUE9TVEdSRVNfVVNFUjogInVzZXIiCiAgICAgIFBPU1RHUkVTX1BBU1NXT1JEOiAicGFzc3dvcmQiCiAgICB2b2x1bWVzOgogICAgICAjIGNvcHkgdGhlIHNxbCBzY3JpcHQgdG8gY3JlYXRlIHRhYmxlcyBhdCBzdGFydCB1cAogICAgICAtIC4vY3JlYXRlX3RhYmxlcy5zcWw6L2RvY2tlci1lbnRyeXBvaW50LWluaXRkYi5kL2NyZWF0ZV90YWJsZXMuc3Fs
+version: "3"
+
+services:
+
+  changebot:
+    container_name: changebot
+    build: ./coSlackbot/.
+    ports:
+      - '<yourport:yourport>'
+    restart: on-failure
+    environment:
+      CHANGEBOT_PORT: <yourport>
+      SLACK_TOKEN: '<your Bot User OAuth token>'
+      CHANGE_CHANNEL_ID: "<your channel id>"
+      SLACK_WORKSPACE_URL: "<your workspace url>"
+      CHANAGE_OPERATOR_URL: "<your endpoint -- example being;; http://<containername>:port/change/create">
+    volumes:
+      - .:/changebot
+    depends_on:
+      - changeoperator
+
+  changeoperator:
+    container_name: changeoperator
+    build: ./coAPI/.
+    ports:
+      - '<yourport:yourport>'
+    environment:
+      CHANGEOPERATOR_PORT: <yourport>
+      PG_CONN: "<your DB Connection. Postgres example: postgres://<username>:<password>@<db contaiuner name>:<port>/<db name>?sslmode=disable">
+    volumes:
+      - .:/changeoperator
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    container_name: changes
+    environment:
+      POSTGRES_USER: "<pick a user name>"
+      POSTGRES_PASSWORD: "<pick a password>"
+    volumes:
+      # copy the sql script to create tables at start up
+      - ./create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql                                                                                                                                                                                                                                                                                                                                                           zachthacker@zachs-mbp  ~/GolandProjects/changeoperator   main  pbcopy < base64 -d /Users/zachthacker/GolandProjects/changeoperator/docker-compose.yaml

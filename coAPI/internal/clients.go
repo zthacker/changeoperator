@@ -2,6 +2,7 @@ package coAPI
 
 import (
 	"database/sql"
+	_ "github.com/lib/pq"
 	"log"
 	"os"
 )
