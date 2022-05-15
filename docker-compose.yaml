@@ -9,11 +9,11 @@ services:
       - '<yourport:yourport>'
     restart: on-failure
     environment:
-      CHANGEBOT_PORT: <yourport>
+      CHANGEBOT_PORT: <the port you used above>
       SLACK_TOKEN: '<your Bot User OAuth token>'
-      CHANGE_CHANNEL_ID: "<your channel id>"
-      SLACK_WORKSPACE_URL: "<your workspace url>"
-      CHANAGE_OPERATOR_URL: "<your endpoint -- example being;; http://<containername>:port/change/create">
+      CHANGE_CHANNEL_ID: "<the channel id  you want to sent the change message to>"
+      SLACK_WORKSPACE_URL: "<your workspace url -- it's easier to find this using slack in your browser>"
+      CHANAGE_OPERATOR_URL: "<your endpoint -- example being;; http://<containername>:port/change/create>"
     volumes:
       - .:/changebot
     depends_on:
@@ -26,7 +26,7 @@ services:
       - '<yourport:yourport>'
     environment:
       CHANGEOPERATOR_PORT: <yourport>
-      PG_CONN: "<your DB Connection. Postgres example: postgres://<username>:<password>@<db contaiuner name>:<port>/<db name>?sslmode=disable">
+      PG_CONN: "<your DB Connection. Postgres example: postgres://<username>:<password>@<db contaiuner name>:<port>/<db name>?sslmode=disable>"
     volumes:
       - .:/changeoperator
     depends_on:
@@ -40,4 +40,5 @@ services:
       POSTGRES_PASSWORD: "<pick a password>"
     volumes:
       # copy the sql script to create tables at start up
+      # be sure to check your permissions!
       - ./create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql                                                                                                                                                                                                                                                                                                                                                           zachthacker@zachs-mbp  ~/GolandProjects/changeoperator   main  pbcopy < base64 -d /Users/zachthacker/GolandProjects/changeoperator/docker-compose.yaml

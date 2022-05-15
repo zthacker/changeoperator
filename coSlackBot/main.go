@@ -6,6 +6,7 @@ import (
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -29,9 +30,8 @@ func main() {
 	http.HandleFunc("/command", coSlackBot.CommandHandler)
 	http.HandleFunc("/interactive-endpoint", coSlackBot.InteractiveHandler)
 
-	//TODO env var the port
 	log.Info("Listen and Serve")
-	err := http.ListenAndServe(":9500", nil)
+	err := http.ListenAndServe(":"+os.Getenv("CHANGEBOT_PORT"), nil)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
